@@ -5,6 +5,11 @@
 //WIFI DATA
 #define   SSID            "CLARO1_8D831B"
 #define   PASSWORD        "606s2wxuxM"
+// PINS
+#define   LUZ1_PIN        D6
+#define   LUZ2_PIN        D5
+#define   LUZ3_PIN        D2
+#define   LUZ4_PIN        D1
 //MQTT DATA
 #define   AIO_SERVER      "io.adafruit.com"
 #define   AIO_SERVERPORT  1883                   // use 8883 for SSL
@@ -12,7 +17,11 @@
 #define   AIO_KEY         "aio_wATA73m3GOukqE0hqoeAY2VXHJAe"
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
-Adafruit_MQTT_Subscribe onoffbutton = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/on-off-google");
+Adafruit_MQTT_Subscribe luz1 = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/luz1");
+Adafruit_MQTT_Subscribe luz2 = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/luz2");
+Adafruit_MQTT_Subscribe luz3 = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/luz3");
+Adafruit_MQTT_Subscribe luz4 = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/luz4");
+//Adafruit_MQTT_Subscribe onoffbutton = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/on-off-google");
 void MQTT_connect();
 
 void setup() {
@@ -26,10 +35,17 @@ void setup() {
   Serial.println(WiFi.localIP());
 
   // Setup MQTT subscription
-  mqtt.subscribe(&onoffbutton);
+  //mqtt.subscribe(&onoffbutton);
+  mqtt.subscribe(&luz1);
+  mqtt.subscribe(&luz2);
+  mqtt.subscribe(&luz3);
+  mqtt.subscribe(&luz4);
 
   // PINS
-  pinMode(D4, OUTPUT);
+  pinMode(LUZ1_PIN, OUTPUT);
+  pinMode(LUZ2_PIN, OUTPUT);
+  pinMode(LUZ3_PIN, OUTPUT);
+  pinMode(LUZ4_PIN, OUTPUT);
 }
 
 void loop() {
@@ -39,13 +55,37 @@ void loop() {
   // Do Checks Programing
   Adafruit_MQTT_Subscribe *subscription;
   while ((subscription = mqtt.readSubscription(5000))) {
-    if (subscription == &onoffbutton) {
-      Serial.print(F("Got: "));
-      Serial.println((char *)onoffbutton.lastread);
-      if (strcmp((char*) onoffbutton.lastread, "ON")){
-        digitalWrite(D4, HIGH);
+    if (subscription == &luz1) {
+      Serial.print(F("luz1: "));
+      Serial.println((char *)luz1.lastread);
+      if (!strcmp((char*) luz1.lastread, "ON")){
+        digitalWrite(LUZ1_PIN, HIGH);
       }else{
-        digitalWrite(D4, LOW);
+        digitalWrite(LUZ1_PIN, LOW);
+      }
+    }else if(subscription == &luz2){
+      Serial.print(F("luz2: "));
+      Serial.println((char *)luz2.lastread);
+      if (!strcmp((char*) luz2.lastread, "ON")){
+        digitalWrite(LUZ2_PIN, HIGH);
+      }else{
+        digitalWrite(LUZ2_PIN, LOW);
+      }
+    }else if(subscription == &luz3){
+      Serial.print(F("luz3: "));
+      Serial.println((char *)luz3.lastread);
+      if (!strcmp((char*) luz3.lastread, "ON")){
+        digitalWrite(LUZ3_PIN, HIGH);
+      }else{
+        digitalWrite(LUZ3_PIN, LOW);
+      }
+    }else if(subscription == &luz4){
+      Serial.print(F("luz4: "));
+      Serial.println((char *)luz4.lastread);
+      if (!strcmp((char*) luz4.lastread, "ON")){
+        digitalWrite(LUZ4_PIN, HIGH);
+      }else{
+        digitalWrite(LUZ4_PIN, LOW);
       }
     }
   }
