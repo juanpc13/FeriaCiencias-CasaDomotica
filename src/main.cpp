@@ -3,8 +3,8 @@
 #include "Adafruit_MQTT.h"
 #include "Adafruit_MQTT_Client.h"
 //WIFI DATA
-#define   SSID            "CLARO1_8D831B"
-#define   PASSWORD        "606s2wxuxM"
+#define   SSID            "yourwifi"
+#define   PASSWORD        "yourpass"
 // PINS
 #define   LUZ1_PIN        D6
 #define   LUZ2_PIN        D5
@@ -13,8 +13,8 @@
 //MQTT DATA
 #define   AIO_SERVER      "io.adafruit.com"
 #define   AIO_SERVERPORT  1883                   // use 8883 for SSL
-#define   AIO_USERNAME    "juanpc13"
-#define   AIO_KEY         "aio_wATA73m3GOukqE0hqoeAY2VXHJAe"
+#define   AIO_USERNAME    "yourusername"
+#define   AIO_KEY         "yourkey"
 WiFiClient client;
 Adafruit_MQTT_Client mqtt(&client, AIO_SERVER, AIO_SERVERPORT, AIO_USERNAME, AIO_KEY);
 Adafruit_MQTT_Subscribe luz1 = Adafruit_MQTT_Subscribe(&mqtt, AIO_USERNAME "/feeds/luz1");
